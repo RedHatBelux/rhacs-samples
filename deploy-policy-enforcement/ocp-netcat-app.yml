@@ -1,0 +1,61 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"httpd-netcat:latest","namespace":"test-policy-acs"},"fieldPath":"spec.template.spec.containers[?(@.name==\"httpd-netcat\")].image"}]'
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: httpd-netcat
+      app.kubernetes.io/component: httpd-netcat
+      app.kubernetes.io/instance: httpd-netcat
+      app.kubernetes.io/name: httpd-netcat
+    name: httpd-netcat
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        deployment: httpd-netcat
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          deployment: httpd-netcat
+      spec:
+        containers:
+        - image: ' '
+          name: httpd-netcat
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: httpd-netcat
+      app.kubernetes.io/component: httpd-netcat
+      app.kubernetes.io/instance: httpd-netcat
+      app.kubernetes.io/name: httpd-netcat
+    name: httpd-netcat
+  spec:
+    ports:
+    - name: 80-tcp
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deployment: httpd-netcat
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}

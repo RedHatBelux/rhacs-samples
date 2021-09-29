@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netcat-deployment
+  labels:
+    app: netcat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netcat
+  template:
+    metadata:
+      labels:
+        app: netcat
+    spec:
+      containers:
+      - name: netcat-test
+        image: quay.io/plewyllie/httpd-netcat:latest
+        ports:
+        - containerPort: 8080
