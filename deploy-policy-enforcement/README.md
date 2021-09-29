@@ -1,4 +1,4 @@
-# This is a small demo to show policy enforcement with ACS
+# This is a small demo to show deploy-time policy enforcement with ACS
 
 ## Step 1: Building the image
 
