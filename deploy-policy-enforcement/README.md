@@ -12,8 +12,9 @@ You will need to push twice as the first time the repo will be created, and the 
 
 ### Step 1 alternative: Build using S2I on OpenShift
 
-This step will leverage OpenShift to build the image. From this folder do the following:
+This step will leverage OpenShift to build the image. We will do this in the 'test-policy-acs' project. From this folder do the following:
 ```
+oc new-project test-policy-acs
 oc new-build --binary --strategy=docker --name httpd-netcat
 oc start-build httpd-netcat --from-dir . -F
 ```
@@ -25,12 +26,18 @@ To make things easy, we can clone the "Curl in Image" policy. You can basically 
 Do not forget to enable the policy.
 
 # Step 3: Deploy on OpenShift/K8s
+## Step 3 with any registry
 Before creating the deployment, open the `netcat-app.yml` file and change the image the one you have build in step 1.
 ```
 kubectl apply -f netcat-app.yml
 ```
+## Step 3 with S2I build (step 1 alternative build)
+```
+oc apply -f ocp-netcat-app.yaml
+```
 
-It should now give you an error message:
+# Deployment fails due to policy
+Creating the deployment should now give you an error message:
 ```
 Error from server (Failed currently enforced policies from StackRox): error when creating "netcat-app.yml": admission webhook "policyeval.stackrox.io" denied the request:
 The attempted operation violated 1 enforced policy, described below:
